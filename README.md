@@ -4,7 +4,7 @@
 
 <br>
 
-#### sass-loader 설정 커스터마이징 하기
+#### `sass-loader` 설정 커스터마이징 하기
 ```
 yarn eject
 ```
