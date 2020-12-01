@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+## 리액트 컴포넌트 스타일링을 실습한 저장소
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 실습을 위해 사용한 명령어 및 패키지
 
-## Available Scripts
+#### sass-loader 설정 커스터마이징 하기
+```
+yarn eject
+```
 
-In the project directory, you can run:
+<br>
 
-### `yarn start`
+`config/webpack.config.js`파일을 아래와 같이 수정한다. 아래는 `styles` 폴더에서 스타일링 작업을 할 때 컴포넌트가 깊어지는 경우를 대비해서 작업하는 것이다.(ex: `@import ../../../styles/utils`)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```js
+{
+  test: sassRegex,
+  exclude: sassModuleRegex,
+  use: getStyleLoaders({
+    importLoaders: 3,
+    sourceMap: isEnvProduction
+      ? shouldUseSourceMap
+      : isEnvDevelopment,
+  }).concat({
+    loader: require.resolve("sass-loader"),
+    options: {
+      sassOptions: {
+        includePaths: [paths.appSrc + "/styles"],
+      },
+      sourceMap: isEnvProduction && shouldUseSourceMap,
+      prependData: `@import 'utils';`,
+    },
+  }),
+  // Don't consider CSS imports dead code even if the
+  // containing package claims to have no side effects.
+  // Remove this when webpack adds a warning or an error for this.
+  // See https://github.com/webpack/webpack/issues/6571
+  sideEffects: true,
+}
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<br>
 
-### `yarn test`
+#### `classnames` 패키지 설치
+```
+yarn add classnames
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+CSS 클래스를 조건부로 설정할 때 매우 유용한 라이브러리이다. CSS Module을 사용할 때 이 라이브러리를 사용하면 여러 클래스를 적용할 때 매우 편리하다.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### `styled-components` 패키지 설치
+```
+yarn add styled-components
+```
+자바스크립트 파일 안에 스타일을 선언하는 방식이다.(CSS-in-JS)
